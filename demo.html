@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="shortcut icon" href="" type="image/x-icon">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <title>图片裁剪</title>
+</head>
+<body>
+<div class="">
+    <input type="file" id="file" accept="image/*" value="选择图片">
+    <img id="cropResult" src="" style="width:100%;">
+</div>
+<script src="./libs/hammer.min.js"></script>
+<script src="./imageCropper.js"></script>
+<script>
+    document.querySelector('#file').addEventListener('change', function (e) {
+        var file = e.target.files[0];
+
+        if (file) {
+            if (/^image\//i.test(file.type)) {
+
+                var url = URL.createObjectURL(file);
+                // console.log(url);
+
+                new ImageCropper({
+                    image_src: url,
+                    circle: false,   // 圆形
+                    width: 300,      // 截取框大小，不要超过320，避免在iPhone5下宽度大了
+                    height: 300,
+                    output: 2,      // 避免在高清下截取的图是模糊的
+                    ok: function (base64, canvas) {
+                        //console.log(base64);
+                        //console.log(canvas);
+                        document.querySelector('#cropResult').src = base64;
+                    },
+                    cancel: function () {
+                    }
+                });
+            } else {
+                throw '只能上传图片';
+            }
+        }
+    })
+</script>
+</body>
+</html>
