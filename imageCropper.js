@@ -1,23 +1,19 @@
 /*
 * author: "oujizeng",
 * license: "MIT",
-* name: "imageCropper.js",
-* version: "1.1.1"
+* name: "imageCrop.js",
+* version: "1.1.2"
 */
 
 (function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        define([], function () {
-            return (root.returnExportsGlobal = factory());
-        });
-    } else if (typeof exports === 'object') {
+    if (typeof module != 'undefined' && module.exports) {
         module.exports = factory();
     } else {
-        root['ImageCropper'] = factory();
+        root['ImageCrop'] = factory();
     }
 }(this, function () {
 
-    var ImageCropper = function (option) {
+    var ImageCrop = function (option) {
         this.renderTo = document.body;
         this.canvas = document.createElement("canvas");
         this.output = option.output || 2;                // 默认放大一倍，避免高清屏模糊
@@ -63,7 +59,7 @@
         this.croppingBox.appendChild(this.cancel_btn);
     };
 
-    ImageCropper.prototype = {
+    ImageCrop.prototype = {
         init: function () {
 
             this.currentMoveX = 0;                           // 横向动画已经滑动距离
@@ -145,7 +141,6 @@
                 }
                 if (evt.target.innerText == self.cancel_text) {
                     self._cancel.call(self);
-                    //self._cancel.bind(self);
                 }
             });
 
@@ -201,10 +196,11 @@
         },
         setStyle: function () {
             this._css(this.cover, {
-                position: "absolute",
+                position: "fixed",
                 zIndex: "100",
                 left: "0px",
-                top: "0px"
+                top: "0px",
+                bottom: "0px"
             });
 
             this._css(this.croppingBox, {
@@ -312,6 +308,6 @@
         }
     };
 
-    return ImageCropper;
-    
+    return ImageCrop;
+
 }));
