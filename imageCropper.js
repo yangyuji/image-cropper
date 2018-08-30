@@ -1,8 +1,9 @@
-/*
+/**
 * author: "oujizeng",
 * license: "MIT",
+* github: "https://github.com/yangyuji/image-cropper",
 * name: "imageCrop.js",
-* version: "1.1.2"
+* version: "1.1.3"
 */
 
 (function (root, factory) {
@@ -60,6 +61,7 @@
     };
 
     ImageCrop.prototype = {
+        version: '1.1.3',
         init: function () {
 
             this.currentMoveX = 0;                           // 横向动画已经滑动距离
@@ -80,13 +82,19 @@
             this.currentHeight = h; // 图片当前高度
             this.pinchMoveX = 0;    // 缩放纠正偏移
             this.pinchMoveY = 0;    // 缩放纠正偏移
-            var self = this;
 
+            this.renderCover();
+            this.setStyle();
+            this._bindTouch.call(this);
+        },
+        _bindTouch: function () {
+            // Hammer.js init
             var hammer = new Hammer(this.croppingBox);
             hammer.get('pan').set({ direction: Hammer.DIRECTION_ALL }); // 拖动所有方向
             hammer.get('pinch').set({ enable: true });                  // 可以缩放
             hammer.get('rotate').set({ enable: true });                 // 可以旋转
 
+            var self = this;
             // 拖动处理
             hammer.on('panmove', function(evt) {
                 var x = self.currentMoveX + evt.deltaX;
@@ -143,9 +151,6 @@
                     self._cancel.call(self);
                 }
             });
-
-            this.renderCover();
-            this.setStyle();
         },
         _cancel: function () {
             this._css(this.croppingBox, {
